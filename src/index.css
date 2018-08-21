@@ -1,16 +1,1 @@
-.LoginHeaderTitle {
-  text-align: end;
-  padding: 20px;
-  color: peachpuff;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  font-size: 2em;
-}
 
-.questions-grid {
-  list-style-type: none;
-  padding: 20;
-  margin: 100px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}

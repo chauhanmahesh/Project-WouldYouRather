@@ -2,100 +2,125 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux'
-import {Card, CardMedia, FormControl, NativeSelect, InputLabel, Avatar, CircularProgress, Button} from '@material-ui/core';
-import classNames from 'classnames';
+import {
+    Card,
+    FormControl,
+    NativeSelect,
+    InputLabel,
+    CircularProgress,
+    Button,
+    Typography,
+    Divider
+} from '@material-ui/core';
 import {relative} from 'upath';
-import {NavLink} from 'react-router-dom';
+import {setAuthedUser} from '../actions/authedUser';
+import UserAvatar from './UserAvatar';
 
 const styles = theme => ({
     login: {
         position: relative,
+        marginTop: 200,
         display: 'flex',
         justifyContent: 'center'
     },
     loginCard: {
-        width: '30%',
-        marginTop: 200
+        minWidth: '30%',
+        padding: 20
     },
-    loginHeader: {
-        height: 150,
-        paddingBottom: 20
+    topDivider: {
+        marginTop: 10
     },
     button: {
-        margin: theme.spacing.unit,
-        maxWidth: '70%',
-        marginLeft: 0,
-        marginTop: 10,
-        marginBottom: 50
+        marginTop: 10
     },
     progress: {
-        marginLeft: '50%',
-        marginBottom: 50
+        margin: 50
     },
-    row: {
+    column: {
+        width: '100%',
         display: 'flex',
-        justifyContent: 'center'
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 30
     },
     formControl: {
-        margin: theme.spacing.unit,
-        minWidth: 220
-    },
-    avatar: {
-        margin: 10
-    },
-    bigAvatar: {
-        width: 60,
-        height: 60
+        marginTop: theme.spacing.unit,
+        minWidth: '50%'
     }
 });
 
 class Login extends React.Component {
     state = {
-        currentUser: 'tylermcginnis'
+        currentUser: ''
     };
 
-    handleSelectedUserChange = currentUser => event => {
-        console.log("handleSelectedUserChange : " + event.target.value)
-        this.setState({[currentUser]: event.target.value});
+    componentWillReceiveProps(nextProps) {
+        if (this.props.users !== nextProps.users) {
+            let userKeys = Object.keys(nextProps.users);
+            let isInitialDataLoaded = userKeys.length > 0;
+            if (isInitialDataLoaded === true) {
+                this.updateState(nextProps.users[userKeys[0]])
+            }
+        }
+    }
+
+    handleSelectedUserChange = users => event => {
+        console.log("handleSelectedUserChange currentUser : " + users[event.target.value])
+        this.updateState(users[event.target.value]);
     };
+
+    handleLogin = event => {
+        event.preventDefault()
+        console.log("handleLogin currentUser : " + this.state.currentUser)
+        // Let's dispatch action to set authedUser.
+        this.props.dispatch(setAuthedUser(this.state.currentUser))
+        this.props.history.push('/home')
+    }
+
+    updateState = user => {
+        this.setState(() => ({currentUser: user}))
+    }
 
     render() {
         const {classes, users} = this.props;
         const {currentUser} = this.state;
         let userKeys = Object.keys(users);
-
+        // Check if we got the list of users.
+        let isInitialDataLoaded = userKeys.length > 0;
+        console.log("isInitialDataLoaded : currentUser " + isInitialDataLoaded + " "  + currentUser.id + " userKeys " + userKeys.length);
         return (
             <div className={classes.login}>
                 <Card className={classes.loginCard}>
-                    <CardMedia className={classes.loginHeader} image="headerBackground.png">
-                        <div className="LoginHeaderTitle">
-                            Would You Rather?
-                        </div>
-                    </CardMedia>
-
-                    {userKeys.length === 0
-                        ? (<CircularProgress color='secondary' className={classes.progress}/>)
-                        : (
-                            <div className={classes.row}>
-                                <Avatar
-                                    src={users[currentUser].avatarURL}
-                                    className={classNames(classes.avatar, classes.bigAvatar)}/>
+                    <Typography variant='title' color="textSecondary">
+                        Would You Rather?
+                    </Typography>
+                    <Divider className={classes.topDivider}/> {
+                        !isInitialDataLoaded ? (
+                            <div className={classes.column}><CircularProgress color='secondary' className={classes.progress}/></div>
+                        ) : (
+                            <div className={classes.column}>
+                                <UserAvatar showBig='true' avatarURL={currentUser.avatarURL}/>
                                 <FormControl className={classes.formControl}>
                                     <InputLabel>Select user</InputLabel>
                                     <NativeSelect
-                                        value={this.state.currentUser}
-                                        onChange={this.handleSelectedUserChange('currentUser')}>
+                                        value={currentUser.id}
+                                        onChange={this.handleSelectedUserChange(users)}>
                                         {userKeys.map(userId => (
                                             <option key={userId} value={userId}>{userId}</option>
                                         ))}
                                     </NativeSelect>
-                                    <Button variant="contained" color="secondary" className={classes.button}>
-                                        <NavLink to='/dashboard' style={{textDecoration: 'none', color: 'white'}}>Login</NavLink>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.button}
+                                        onClick={this.handleLogin}>
+                                        Login
                                     </Button>
                                 </FormControl>
                             </div>
                         )
-}
+                    }
                 </Card>
             </div>
         );

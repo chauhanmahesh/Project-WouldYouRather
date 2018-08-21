@@ -1,12 +1,12 @@
 import React from 'react';
 import Login from './Login';
-import Dashboard from './Dashboard';
+import Home from './Home';
 import {connect} from 'react-redux';
 import {handleInitialData} from '../actions/shared';
 import {Route, Switch, BrowserRouter} from 'react-router-dom'
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 class App extends React.Component {
-
     componentDidMount() {
         const {dispatch} = this.props
         dispatch(handleInitialData())
@@ -16,10 +16,11 @@ class App extends React.Component {
         return (
             <BrowserRouter>
                 <div>
-
+                    {/** To use page wise default, let's use CssBaseline**/}
+                    <CssBaseline/>
                     <Switch>
                         <Route exact path='/' component={Login}/>
-                        <Route exact path='/dashboard' component={Dashboard}/>
+                        <Route exact path='/home' component={Home}/>
                     </Switch>
                 </div>
             </BrowserRouter>
