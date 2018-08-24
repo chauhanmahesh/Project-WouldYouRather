@@ -52,7 +52,6 @@ const styles = theme => ({
 
 class Login extends React.Component {
     state = {
-        currentUser: ''
     };
 
     componentWillReceiveProps(nextProps) {
@@ -75,7 +74,7 @@ class Login extends React.Component {
         console.log("handleLogin currentUser : " + this.state.currentUser)
         // Let's dispatch action to set authedUser.
         this.props.dispatch(setAuthedUser(this.state.currentUser))
-        this.props.history.push('/home')
+        this.props.history.push('/')
     }
 
     updateState = user => {

@@ -12,8 +12,12 @@ const styles = {
         flexGrow: 1
     },
     navigation: {
-        backgroundColor: "#aad0e4"
-    }
+        backgroundColor: "#8a8a8a"
+    },
+    tabLabel: {
+        fontSize: 18,
+        textTransform: 'initial'
+    },
 };
 
 class QuestionTypeNavigation extends React.Component {
@@ -50,9 +54,9 @@ class QuestionTypeNavigation extends React.Component {
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.navigation}>
-                    <Tabs value={value} onChange={this.handleChange}>
-                        <Tab label="Unanwered"/>
-                        <Tab label="Answered"/>
+                    <Tabs value={value} onChange={this.handleChange} indicatorColor="primary">
+                        <Tab label={<span className={classes.tabLabel}>Unanswered</span>}/>
+                        <Tab label={<span className={classes.tabLabel}>Answered</span>}/>
                     </Tabs>
                 </AppBar>
                 {value === 0 && this.showUnansweredQuestions(questions, authedUser)}

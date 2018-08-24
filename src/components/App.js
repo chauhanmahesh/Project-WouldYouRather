@@ -1,10 +1,16 @@
 import React from 'react';
 import Login from './Login';
-import Home from './Home';
+import QuestionTypeNavigation from './QuestionTypeNavigation';
 import {connect} from 'react-redux';
 import {handleInitialData} from '../actions/shared';
 import {Route, Switch, BrowserRouter} from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Navigation from './Navigation';
+import InvalidPage from './InvalidPage';
+import QuestionDetail from './QuestionDetail';
+import Test1 from './Test1';
+import Test2 from './Test2';
+import RouteDecider from './RouteDecider'
 
 class App extends React.Component {
     componentDidMount() {
@@ -18,9 +24,14 @@ class App extends React.Component {
                 <div>
                     {/** To use page wise default, let's use CssBaseline**/}
                     <CssBaseline/>
+                    <Navigation/>
                     <Switch>
-                        <Route exact path='/' component={Login}/>
-                        <Route exact path='/home' component={Home}/>
+                        <Route exact path='/login' component={Login}/>
+                        <RouteDecider exact path='/' component={QuestionTypeNavigation}/>
+                        <RouteDecider exact path='/questions/:questionId' component={QuestionDetail}/>
+                        <RouteDecider exact path='/newQuestion' component={Test1}/>
+                        <RouteDecider exact path='/leaderboard' component={Test2}/>
+                        <Route component={InvalidPage}/>
                     </Switch>
                 </div>
             </BrowserRouter>

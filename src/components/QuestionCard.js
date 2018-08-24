@@ -6,6 +6,8 @@ import QuestionOption from './QuestionOption'
 import {connect} from 'react-redux'
 import UserAvatar from './UserAvatar'
 import QuestionResultChart from './QuestionResultChart'
+import {withRouter} from 'react-router-dom'
+import { handleSaveQuestionAnswer } from '../actions/answers';
 
 const styles = theme => ({
     questionCard: {
@@ -23,6 +25,15 @@ const styles = theme => ({
         flexDirection: 'column',
         justifyContent: 'center',
         marginLeft: 20
+    },
+    answerStat: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginTop: 20
+    },
+    navLink: {
+        textDecoration: 'none'
     }
 });
 
@@ -46,7 +57,18 @@ class QuestionCard extends React.Component {
         }
     }
 
-    showInAnsweredMode = (classes, author, cardQuestion, authedUser) => {
+    submitAnswer = (answer) => {
+        console.log("handleSubmitAnswer()")
+        // Let's dispatch an action to save answer.
+        const {dispatch, authedUser, cardQuestion, history} = this.props
+        dispatch(handleSaveQuestionAnswer(authedUser, cardQuestion.id, answer, () => {
+            history.push(`/questions/${cardQuestion.id}`)
+        }))
+    }
+
+    showInAnsweredMode = () => {
+        const {classes, cardQuestion, users, authedUser} = this.props;
+        const author = users[cardQuestion.author]
         const option1Percentage = this.optionPercentage(cardQuestion.optionOne.votes.length, cardQuestion.optionTwo.votes.length)
         const option2Percentage = this.optionPercentage(cardQuestion.optionTwo.votes.length, cardQuestion.optionOne.votes.length)
         return (
@@ -57,12 +79,25 @@ class QuestionCard extends React.Component {
                     </Typography>
                     <UserAvatar showBig='false' avatarURL={author.avatarURL}/>
                 </div>
-
                 <Divider className={classes.topDivider}/>
                 <div className={classes.row}>
-                    <QuestionResultChart
-                        option1Percentage={option1Percentage}
-                        option2Percentage={option2Percentage}/>
+                    <div className={classes.answerStat}>
+                        <QuestionResultChart
+                            option1Percentage={option1Percentage}
+                            option2Percentage={option2Percentage}/>
+                        <Typography
+                            variant='subheading'
+                            style={{textAlign:'center', color:'#d16161', marginTop: 10}}>
+                            Option A: {cardQuestion.optionOne.votes.length} votes
+                        </Typography>
+                        <Divider className={classes.topDivider}/>
+                        <Typography
+                            variant='subheading'
+                            style={{textAlign:'center', color:'#619bd1', marginTop: 10}}>
+                            Option B: {cardQuestion.optionTwo.votes.length} votes
+                        </Typography>
+                    </div>
+                    
                     <div className={classes.column}>
                         <Typography
                             variant='subheading'
@@ -88,7 +123,9 @@ class QuestionCard extends React.Component {
         )
     }
 
-    showInUnansweredMode = (classes, author, cardQuestion) => {
+    showInUnansweredMode = () => {
+        const {classes, cardQuestion, users} = this.props;
+        const author = users[cardQuestion.author]
         return (
             <Card className={classes.questionCard}>
                 <Typography variant='title' color="textSecondary">
@@ -108,8 +145,8 @@ class QuestionCard extends React.Component {
                             Would you rather?
                         </Typography>
                         <div className={classes.row}>
-                            <QuestionOption isFirstOption='true' optionText={cardQuestion.optionOne.text}/>
-                            <QuestionOption optionText={cardQuestion.optionTwo.text}/>
+                            <QuestionOption isFirstOption='true' optionText={cardQuestion.optionOne.text} handleSubmitAnswer={this.submitAnswer}/>
+                            <QuestionOption optionText={cardQuestion.optionTwo.text} handleSubmitAnswer={this.submitAnswer}/>
                         </div>
                     </div>
                 </div>
@@ -117,22 +154,21 @@ class QuestionCard extends React.Component {
         )
     }
 
-    isAnsweredByAuthedUser = (question, authedUser) => {
+    isAnsweredByAuthedUser = () => {
+        const {cardQuestion, authedUser} = this.props;
         const allAnswerKeys = Object.keys(authedUser.answers)
         const questionId = Object
-            .assign(question)
+            .assign(cardQuestion)
             .id
         return allAnswerKeys.includes(questionId)
     }
 
     render() {
-        const {classes, cardQuestion, author, authedUser} = this.props;
-        console.log("Question : " + cardQuestion.id + " & user answer : " + this.getUserSelectedOption(cardQuestion, authedUser))
         // Let's check if this question is answered by authedUser or not.
-        const isAnswered = this.isAnsweredByAuthedUser(cardQuestion, authedUser)
+        const isAnswered = this.isAnsweredByAuthedUser()
         return isAnswered
-            ? (this.showInAnsweredMode(classes, author, cardQuestion, authedUser))
-            : (this.showInUnansweredMode(classes, author, cardQuestion))
+            ? (this.showInAnsweredMode())
+            : (this.showInUnansweredMode())
     }
 }
 
@@ -140,6 +176,6 @@ QuestionCard.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({authedUser}) => ({authedUser});
+const mapStateToProps = ({authedUser, users}) => ({authedUser, users});
 
-export default withStyles(styles)(connect(mapStateToProps)(QuestionCard));
+export default withRouter(withStyles(styles)(connect(mapStateToProps)(QuestionCard)));

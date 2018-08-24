@@ -1,8 +1,8 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import QuestionCard from './QuestionCard';
-import {Grid, Typography} from '@material-ui/core';
-import {withStyles} from '@material-ui/core/styles';
+import React from 'react'
+import {connect} from 'react-redux'
+import QuestionCard from './QuestionCard'
+import {Grid, Typography} from '@material-ui/core'
+import {withStyles} from '@material-ui/core/styles'
 
 const styles = theme => ({
     root: {
@@ -15,7 +15,7 @@ const styles = theme => ({
 
 class QuestionCards extends React.Component {
     render() {
-        const {questions, users, classes} = this.props
+        const {questions, classes} = this.props
         const questionKeys = Object.keys(questions)
         if (questionKeys.length === 0) {
             return (
@@ -32,8 +32,7 @@ class QuestionCards extends React.Component {
                     <Grid item key={questionKey}>
                         <QuestionCard
                             key={questionKey}
-                            cardQuestion={questions[questionKey]}
-                            author={users[questions[questionKey].author]}/>
+                            cardQuestion={questions[questionKey]}/>
                     </Grid>
                 ))
 }
@@ -42,6 +41,6 @@ class QuestionCards extends React.Component {
     }
 }
 
-const mapStateToProps = ({authedUser, users}) => ({authedUser, users});
+const mapStateToProps = ({authedUser}) => ({authedUser});
 
 export default withStyles(styles)(connect(mapStateToProps)(QuestionCards));

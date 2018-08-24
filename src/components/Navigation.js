@@ -1,52 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {
-    AppBar,
-    Typography,
-    Button
-} from '@material-ui/core';
+import {AppBar, Typography, Button} from '@material-ui/core';
 import {connect} from 'react-redux';
 import {unsetAuthedUser} from '../actions/authedUser';
 import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import QuestionTypeNavigation from './QuestionTypeNavigation';
+import Tab from '@material-ui/core/Tab'
 import UserAvatar from './UserAvatar';
+import {withRouter, Link} from 'react-router-dom'
+import { handleInitialData } from '../actions/shared';
 
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        width: '100%',
+        width: '100%'
     },
     navigation: {
-        background: '#103F57',
+        background: '#46CDA8',
+        minHeight: 45,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'left',
         alignItems: 'center',
-        paddingLeft: 20,
-        paddingRight: 20
+        paddingRight: 20,
+        paddingLeft: 20
     },
     title: {
-        color: "#FEDABB",
+        color: "white",
         marginRight: 20
     },
-    tabRoot: {
-        textTransform: 'initial',
-        minWidth: 72,
-        fontWeight: theme.typography.fontWeightMedium,
-        marginRight: theme.spacing.unit * 4,
-        '&:hover': {
-          color: '#40a9ff',
-          opacity: 1,
-        },
-        '&$tabSelected': {
-          color: '#1890ff',
-          fontWeight: theme.typography.fontWeightMedium,
-        },
-        '&:focus': {
-          color: '#40a9ff',
-        },
+    tabLabel: {
+        fontSize: 18,
+        textTransform: 'initial'
     },
     menuItemTitle: {
         color: 'white'
@@ -62,28 +47,31 @@ class Navigation extends React.Component {
         event.preventDefault()
         console.log("handleLogout")
         // Let's dispatch action to set authedUser.
+        this.props.dispatch(unsetAuthedUser())
+        // Let's move back to login page.
         this
             .props
-            .dispatch(unsetAuthedUser)
+            .history
+            .push('/login')
+        // Also let's dispatch an action to fetch the initial data again.
+        this.props.dispatch(handleInitialData())
     }
 
     handleTabChange = (event, currentTab) => {
         this.setState({currentTab});
     };
 
-    render() {
-        const {classes, authedUser} = this.props;
-        const {currentTab} = this.state
+    renderAppBarWhenLoggedIn = (classes, currentTab, authedUser) => {
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.navigation}>
                     <Typography variant="title" className={classes.title}>
                         Would You Rather?
                     </Typography>
-                    <Tabs value={currentTab} onChange={this.handleTabChange}>
-                        <Tab label="Questions" className={classes.tabRoot} />
-                        <Tab label="New Question" className={classes.tabRoot}/>
-                        <Tab label="Leaderboard" className={classes.tabRoot}/>
+                    <Tabs value={currentTab} onChange={this.handleTabChange} indicatorColor="primary">
+                        <Tab label={<span className={classes.tabLabel}>Questions</span>} component={Link} to="/"/>
+                        <Tab label={<span className={classes.tabLabel}>Add Question</span>} component={Link} to="/add"/>
+                        <Tab label={<span className={classes.tabLabel}>Leaderboard</span>} component={Link} to="/leaderboard"/>
                     </Tabs>
                     <div style={{
                         flex: 1
@@ -96,17 +84,39 @@ class Navigation extends React.Component {
                         Logout
                     </Button>
                 </AppBar>
-                {currentTab === 0 && <QuestionTypeNavigation/>}
             </div>
-        ) 
-    }         
-}
-        
-Navigation.propTypes = {
-    classes : PropTypes.object.isRequired
-}; 
+        )
+    }
 
-// Grab data from Redux store as props 
+    renderAppBarWhenLoggedOut = (classes) => {
+        return (
+            <div className={classes.root}>
+                <AppBar position="static" className={classes.navigation}>
+                    <Typography variant="title" className={classes.title}>
+                        Would You Rather?
+                    </Typography>
+                </AppBar>
+            </div>
+        )
+    }
+
+    render() {
+        const {classes, authedUser} = this.props;
+        const {currentTab} = this.state
+        console.log("authedUser on Navigation : " + authedUser + " currentTab : " + currentTab)
+        const isLoggedIn = authedUser !== null
+        console.log("authedUser on Navigation : " + authedUser + " isLoggedIn : " + isLoggedIn)
+        return isLoggedIn
+            ? (this.renderAppBarWhenLoggedIn(classes, currentTab, authedUser))
+            : (this.renderAppBarWhenLoggedOut(classes))
+    }
+}
+
+Navigation.propTypes = {
+    classes: PropTypes.object.isRequired
+};
+
+// Grab data from Redux store as props
 const mapStateToProps = ({authedUser}) => ({authedUser})
 
-export default withStyles(styles)(connect(mapStateToProps)(Navigation))
+export default withRouter(withStyles(styles)(connect(mapStateToProps)(Navigation)))
