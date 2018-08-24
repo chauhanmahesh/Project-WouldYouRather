@@ -52,6 +52,7 @@ const styles = theme => ({
 
 class Login extends React.Component {
     state = {
+        currentUser: ''
     };
 
     componentWillReceiveProps(nextProps) {
