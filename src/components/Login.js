@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import React from 'react'
+import PropTypes from 'prop-types'
+import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
 import {
     Card,
@@ -11,15 +11,15 @@ import {
     Button,
     Typography,
     Divider
-} from '@material-ui/core';
-import {relative} from 'upath';
-import {setAuthedUser} from '../actions/authedUser';
-import UserAvatar from './UserAvatar';
+} from '@material-ui/core'
+import {relative} from 'upath'
+import {setAuthedUser} from '../actions/authedUser'
+import UserAvatar from './UserAvatar'
 
 const styles = theme => ({
-    login: {
+    root: {
         position: relative,
-        marginTop: 200,
+        marginTop: 80,
         display: 'flex',
         justifyContent: 'center'
     },
@@ -48,17 +48,17 @@ const styles = theme => ({
         marginTop: theme.spacing.unit,
         minWidth: '50%'
     }
-});
+})
 
 class Login extends React.Component {
     state = {
         currentUser: ''
-    };
+    }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.users !== nextProps.users) {
-            let userKeys = Object.keys(nextProps.users);
-            let isInitialDataLoaded = userKeys.length > 0;
+            let userKeys = Object.keys(nextProps.users)
+            let isInitialDataLoaded = userKeys.length > 0
             if (isInitialDataLoaded === true) {
                 this.updateState(nextProps.users[userKeys[0]])
             }
@@ -66,16 +66,14 @@ class Login extends React.Component {
     }
 
     handleSelectedUserChange = users => event => {
-        console.log("handleSelectedUserChange currentUser : " + users[event.target.value])
-        this.updateState(users[event.target.value]);
-    };
+        this.updateState(users[event.target.value])
+    }
 
     handleLogin = event => {
         event.preventDefault()
-        console.log("handleLogin currentUser : " + this.state.currentUser)
         // Let's dispatch action to set authedUser.
         this.props.dispatch(setAuthedUser(this.state.currentUser))
-        this.props.history.push('/')
+        this.props.history.replace('/')
     }
 
     updateState = user => {
@@ -83,14 +81,13 @@ class Login extends React.Component {
     }
 
     render() {
-        const {classes, users} = this.props;
-        const {currentUser} = this.state;
-        let userKeys = Object.keys(users);
+        const {classes, users} = this.props
+        const {currentUser} = this.state
+        let userKeys = Object.keys(users)
         // Check if we got the list of users.
-        let isInitialDataLoaded = userKeys.length > 0;
-        console.log("isInitialDataLoaded : currentUser " + isInitialDataLoaded + " "  + currentUser.id + " userKeys " + userKeys.length);
+        let isInitialDataLoaded = userKeys.length > 0
         return (
-            <div className={classes.login}>
+            <div className={classes.root}>
                 <Card className={classes.loginCard}>
                     <Typography variant='title' color="textSecondary">
                         Would You Rather?
@@ -123,7 +120,7 @@ class Login extends React.Component {
                     }
                 </Card>
             </div>
-        );
+        )
     }
 }
 
@@ -132,6 +129,6 @@ Login.propTypes = {
 };
 
 // Grab data from Redux store as props
-const mapStateToProps = ({users}) => ({users});
+const mapStateToProps = ({users}) => ({users})
 
-export default withStyles(styles)(connect(mapStateToProps)(Login));
+export default withStyles(styles)(connect(mapStateToProps)(Login))

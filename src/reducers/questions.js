@@ -1,5 +1,4 @@
-import {RECEIVE_QUESTIONS, ADD_QUESTION} from '../actions/questions'
-import {SAVE_QUESTION_ANSWER} from '../actions/answers'
+import {RECEIVE_QUESTIONS, ADD_QUESTION, SAVE_QUESTION_ANSWER} from '../actions/questions'
 
 export default function questions(state = {}, action) {
     switch (action.type) {
@@ -9,10 +8,12 @@ export default function questions(state = {}, action) {
                 ...action.questions
             }
         case ADD_QUESTION:
-            return state.concat([action.question])
+            return {
+                ...state,
+                [action.formattedQuestion.id]: action.formattedQuestion
+            }
         case SAVE_QUESTION_ANSWER:
             const {authedUser, qid, answer} = action.answerInfo
-            console.log("SAVE_QUESTION_ANSWER authedUser : " + authedUser + " qid : " + qid + " answer : " + answer)
             const question = state[qid]
             return {
                 ...state,

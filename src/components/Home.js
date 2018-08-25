@@ -1,6 +1,6 @@
-import React from 'react';
-import Navigation from './Navigation';
+import React from 'react'
+import Navigation from './Navigation'
 
-const Home = (props) => (<Navigation/>)
+const Home = () => (<Navigation/>)
 
-export default Home;
+export default Home

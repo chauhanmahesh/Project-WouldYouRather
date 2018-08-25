@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route, Redirect, withRouter} from 'react-router-dom'
-import {connect} from 'react-redux';
+import {connect} from 'react-redux'
 
 const RouteDecider = ({ component: Component, authedUser, ...rest }) => (
   <Route {...rest} render={(props) => (
@@ -12,6 +12,6 @@ const RouteDecider = ({ component: Component, authedUser, ...rest }) => (
   )} />
 )
 
-const mapStateToProps = ({authedUser}) => ({authedUser});
+const mapStateToProps = ({authedUser}) => ({authedUser})
 
-export default withRouter(connect(mapStateToProps)(RouteDecider));
+export default withRouter(connect(mapStateToProps)(RouteDecider))

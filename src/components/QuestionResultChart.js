@@ -22,4 +22,4 @@ const QuestionResultChart = (props) => {
     }}/>)
 }
 
-export default QuestionResultChart;
+export default QuestionResultChart

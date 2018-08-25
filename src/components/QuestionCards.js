@@ -11,12 +11,14 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'center'
     }
-});
+})
 
 class QuestionCards extends React.Component {
     render() {
         const {questions, classes} = this.props
-        const questionKeys = Object.keys(questions)
+        // Let's sort it.
+        const sortedQuestions = questions.sort((question) => question.timestamp)
+        const questionKeys = Object.keys(sortedQuestions)
         if (questionKeys.length === 0) {
             return (
                 <div className={classes.root}>
@@ -32,7 +34,7 @@ class QuestionCards extends React.Component {
                     <Grid item key={questionKey}>
                         <QuestionCard
                             key={questionKey}
-                            cardQuestion={questions[questionKey]}/>
+                            cardQuestion={sortedQuestions[questionKey]}/>
                     </Grid>
                 ))
 }
@@ -41,6 +43,6 @@ class QuestionCards extends React.Component {
     }
 }
 
-const mapStateToProps = ({authedUser}) => ({authedUser});
+const mapStateToProps = ({authedUser}) => ({authedUser})
 
-export default withStyles(styles)(connect(mapStateToProps)(QuestionCards));
+export default withStyles(styles)(connect(mapStateToProps)(QuestionCards))

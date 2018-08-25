@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import UserAvatar from './UserAvatar'
 import QuestionResultChart from './QuestionResultChart'
 import {withRouter} from 'react-router-dom'
-import { handleSaveQuestionAnswer } from '../actions/answers';
+import { handleSaveQuestionAnswer } from '../actions/questions'
 
 const styles = theme => ({
     questionCard: {
@@ -35,7 +35,7 @@ const styles = theme => ({
     navLink: {
         textDecoration: 'none'
     }
-});
+})
 
 class QuestionCard extends React.Component {
     optionPercentage = (favouredCount, unfavouredCount) => {
@@ -67,7 +67,7 @@ class QuestionCard extends React.Component {
     }
 
     showInAnsweredMode = () => {
-        const {classes, cardQuestion, users, authedUser} = this.props;
+        const {classes, cardQuestion, users, authedUser} = this.props
         const author = users[cardQuestion.author]
         const option1Percentage = this.optionPercentage(cardQuestion.optionOne.votes.length, cardQuestion.optionTwo.votes.length)
         const option2Percentage = this.optionPercentage(cardQuestion.optionTwo.votes.length, cardQuestion.optionOne.votes.length)
@@ -124,7 +124,7 @@ class QuestionCard extends React.Component {
     }
 
     showInUnansweredMode = () => {
-        const {classes, cardQuestion, users} = this.props;
+        const {classes, cardQuestion, users} = this.props
         const author = users[cardQuestion.author]
         return (
             <Card className={classes.questionCard}>
@@ -155,7 +155,7 @@ class QuestionCard extends React.Component {
     }
 
     isAnsweredByAuthedUser = () => {
-        const {cardQuestion, authedUser} = this.props;
+        const {cardQuestion, authedUser} = this.props
         const allAnswerKeys = Object.keys(authedUser.answers)
         const questionId = Object
             .assign(cardQuestion)
@@ -176,6 +176,6 @@ QuestionCard.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({authedUser, users}) => ({authedUser, users});
+const mapStateToProps = ({authedUser, users}) => ({authedUser, users})
 
-export default withRouter(withStyles(styles)(connect(mapStateToProps)(QuestionCard)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps)(QuestionCard)))

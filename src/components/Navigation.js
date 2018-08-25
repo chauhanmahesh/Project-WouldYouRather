@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
-import {AppBar, Typography, Button} from '@material-ui/core';
-import {connect} from 'react-redux';
-import {unsetAuthedUser} from '../actions/authedUser';
-import Tabs from '@material-ui/core/Tabs';
+import React from 'react'
+import PropTypes from 'prop-types'
+import {withStyles} from '@material-ui/core/styles'
+import {AppBar, Typography, Button} from '@material-ui/core'
+import {connect} from 'react-redux'
+import {unsetAuthedUser} from '../actions/authedUser'
+import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import UserAvatar from './UserAvatar';
+import UserAvatar from './UserAvatar'
 import {withRouter, Link} from 'react-router-dom'
-import { handleInitialData } from '../actions/shared';
+import { handleInitialData } from '../actions/shared'
 
 const styles = theme => ({
     root: {
@@ -36,12 +36,42 @@ const styles = theme => ({
     menuItemTitle: {
         color: 'white'
     }
-});
+})
 
 class Navigation extends React.Component {
     state = {
         currentTab: 0
-    };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.location !== nextProps.location) {
+            const {pathname} = nextProps.location
+            // Let's map pathname to tab.
+            // '/' maps to 0 (Questions)
+            // '/add' maps to 1 (New Question)
+            // '/leaderboard' maps to 2 (Leaderboard)
+            const index = this.getTabIndexForPath(pathname)
+            this.setState({
+                currentTab: index
+            })
+        }
+    }
+
+    getTabIndexForPath(pathname) {
+        // Let's map pathname to tab.
+        // '/' maps to 0 (Questions)
+        // '/add' maps to 1 (New Question)
+        // '/leaderboard' maps to 2 (Leaderboard)
+        switch(pathname) {
+            case '/add':
+                return 1
+            case '/leaderboard':
+                return 2
+            case '/':
+            default:
+                return 0 
+        }
+    }
 
     handleLogout = event => {
         event.preventDefault()
@@ -52,13 +82,14 @@ class Navigation extends React.Component {
         this
             .props
             .history
-            .push('/login')
+            .replace('/login')
         // Also let's dispatch an action to fetch the initial data again.
         this.props.dispatch(handleInitialData())
     }
 
     handleTabChange = (event, currentTab) => {
-        this.setState({currentTab});
+        event.preventDefault()
+        this.setState({currentTab})
     };
 
     renderAppBarWhenLoggedIn = (classes, currentTab, authedUser) => {

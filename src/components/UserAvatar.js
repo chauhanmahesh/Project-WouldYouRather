@@ -1,8 +1,8 @@
-import React from 'react';
-import {Avatar} from '@material-ui/core';
-import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
-import classNames from 'classnames';
+import React from 'react'
+import {Avatar} from '@material-ui/core'
+import PropTypes from 'prop-types'
+import {withStyles} from '@material-ui/core/styles'
+import classNames from 'classnames'
 
 const styles = theme => ({
     avatar: {
@@ -24,6 +24,6 @@ const UserAvatar = (props) => {
 
 UserAvatar.propTypes = {
     classes: PropTypes.object.isRequired
-};
+}
 
-export default withStyles(styles)(UserAvatar);
+export default withStyles(styles)(UserAvatar)
