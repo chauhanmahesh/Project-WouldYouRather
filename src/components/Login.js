@@ -55,6 +55,14 @@ class Login extends React.Component {
         currentUser: ''
     }
 
+    componentDidMount() {
+        let userKeys = Object.keys(this.props.users)
+            let isInitialDataLoaded = userKeys.length > 0
+            if (isInitialDataLoaded === true) {
+                this.updateState(this.props.users[userKeys[0]])
+            }
+    }
+
     componentWillReceiveProps(nextProps) {
         if (this.props.users !== nextProps.users) {
             let userKeys = Object.keys(nextProps.users)

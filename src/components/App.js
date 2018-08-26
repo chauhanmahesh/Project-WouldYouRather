@@ -8,9 +8,9 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Navigation from './Navigation'
 import InvalidPage from './InvalidPage'
 import QuestionDetail from './QuestionDetail'
-import Test2 from './Test2'
 import RouteDecider from './RouteDecider'
 import NewQuestion from './NewQuestion'
+import Leaderboard from './Leaderboard'
 
 class App extends React.Component {
     componentDidMount() {
@@ -30,7 +30,7 @@ class App extends React.Component {
                         <RouteDecider exact path='/' component={QuestionTypeNavigation}/>
                         <RouteDecider exact path='/questions/:questionId' component={QuestionDetail}/>
                         <RouteDecider exact path='/add' component={NewQuestion}/>
-                        <RouteDecider exact path='/leaderboard' component={Test2}/>
+                        <RouteDecider exact path='/leaderboard' component={Leaderboard}/>
                         <Route component={InvalidPage}/>
                     </Switch>
                 </div>

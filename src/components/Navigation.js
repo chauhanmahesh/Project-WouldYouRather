@@ -8,7 +8,6 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import UserAvatar from './UserAvatar'
 import {withRouter, Link} from 'react-router-dom'
-import { handleInitialData } from '../actions/shared'
 
 const styles = theme => ({
     root: {
@@ -83,12 +82,9 @@ class Navigation extends React.Component {
             .props
             .history
             .replace('/login')
-        // Also let's dispatch an action to fetch the initial data again.
-        this.props.dispatch(handleInitialData())
     }
 
     handleTabChange = (event, currentTab) => {
-        event.preventDefault()
         this.setState({currentTab})
     };
 

@@ -16,7 +16,7 @@ class NewQuestion extends React.Component {
         const {classes} = this.props
         return (
             <div className={classes.root}>
-                <NewQuestionCard/>
+                <NewQuestionCard />
             </div>
         )
     }
