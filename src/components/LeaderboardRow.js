@@ -67,7 +67,7 @@ class LeaderboardRow extends React.Component {
                             </Typography></TableCell>
                 <TableCell>
                     <div className={classes.column}>
-                        <Avatar alt={leaderboardData.score} className={classes.score}>
+                        <Avatar className={classes.score}>
                             <Typography variant='subheading' className={classes.scoreLabel}>
                                 {leaderboardData.score}
                             </Typography>

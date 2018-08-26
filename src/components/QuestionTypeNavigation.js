@@ -25,10 +25,18 @@ class QuestionTypeNavigation extends React.Component {
         value: 0
     }
 
+    /**
+     * @description Handles tab change and update the state.
+     */
     handleChange = (event, value) => {
         this.setState({value});
     }
 
+    /**
+     * @description Render list of unanswered questions.
+     * @param {object} questions : List of questions to render.
+     * @param {object} authedUser : Current logged in user.
+     */
     showUnansweredQuestions = (questions, authedUser) => {
         // Let's filter the questions which we need. Here we just need unanswered
         // questions by authedUser.
@@ -38,6 +46,11 @@ class QuestionTypeNavigation extends React.Component {
         return (<QuestionCards questions={unansweredQuestions}/>)
     }
 
+    /**
+     * @description Render list of answered questions.
+     * @param {object} questions : List of questions to render.
+     * @param {object} authedUser : Current logged in user.
+     */
     showAnsweredQuestions = (questions, authedUser) => {
         // Let's filter the questions which we need. Here we just need answered
         // questions by authedUser.
@@ -70,6 +83,7 @@ QuestionTypeNavigation.propTypes = {
     classes: PropTypes.object.isRequired
 }
 
+// Grab data from Redux store as props
 const mapStateToProps = ({questions, authedUser}) => ({questions, authedUser})
 
 export default withStyles(styles)(connect(mapStateToProps)(QuestionTypeNavigation))

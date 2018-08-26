@@ -43,6 +43,7 @@ class QuestionCards extends React.Component {
     }
 }
 
+// Grab data from Redux store as props
 const mapStateToProps = ({authedUser}) => ({authedUser})
 
 export default withStyles(styles)(connect(mapStateToProps)(QuestionCards))

@@ -38,6 +38,12 @@ const styles = theme => ({
 })
 
 class QuestionCard extends React.Component {
+    /**
+     * @description Returns the option percentage.
+     * @param {int} favouredCount no of votes in favour.
+     * @param {int} unfavouredCount no of votes which are not in favour.
+     * @returns {int} option percentage in terms of favour.
+     */
     optionPercentage = (favouredCount, unfavouredCount) => {
         return (favouredCount / (favouredCount + unfavouredCount)) * 100
     }
@@ -57,19 +63,30 @@ class QuestionCard extends React.Component {
         }
     }
 
+    /**
+     * @description Submits the answer for the question.
+     * Dispatches an action to submit the answer. Once done, moves to question detail page.
+     * @param {string} answer 'optionA' or 'optionB'
+     */
     submitAnswer = (answer) => {
         console.log("handleSubmitAnswer()")
         // Let's dispatch an action to save answer.
         const {dispatch, authedUser, cardQuestion, history} = this.props
         dispatch(handleSaveQuestionAnswer(authedUser, cardQuestion.id, answer, () => {
+            // Let's move the question detail page.
             history.push(`/questions/${cardQuestion.id}`)
         }))
     }
 
+    /**
+     * @description Renders the question in the answer mode.
+     */
     showInAnsweredMode = () => {
         const {classes, cardQuestion, users, authedUser} = this.props
         const author = users[cardQuestion.author]
+        // Let's calculate optionA percentage.
         const option1Percentage = this.optionPercentage(cardQuestion.optionOne.votes.length, cardQuestion.optionTwo.votes.length)
+        // Let's calculate optionB percentage.
         const option2Percentage = this.optionPercentage(cardQuestion.optionTwo.votes.length, cardQuestion.optionOne.votes.length)
         return (
             <Card className={classes.questionCard}>
@@ -123,6 +140,9 @@ class QuestionCard extends React.Component {
         )
     }
 
+    /**
+     * @description Renders the question in the unanswer mode.
+     */
     showInUnansweredMode = () => {
         const {classes, cardQuestion, users} = this.props
         const author = users[cardQuestion.author]
@@ -154,6 +174,9 @@ class QuestionCard extends React.Component {
         )
     }
 
+    /**
+     * @description Checks if this question is answered by authed user or not.
+     */
     isAnsweredByAuthedUser = () => {
         const {cardQuestion, authedUser} = this.props
         const allAnswerKeys = Object.keys(authedUser.answers)
@@ -176,6 +199,7 @@ QuestionCard.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
+// Grab data from Redux store as props
 const mapStateToProps = ({authedUser, users}) => ({authedUser, users})
 
 export default withRouter(withStyles(styles)(connect(mapStateToProps)(QuestionCard)))

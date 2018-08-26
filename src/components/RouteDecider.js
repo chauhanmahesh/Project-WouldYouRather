@@ -12,6 +12,7 @@ const RouteDecider = ({ component: Component, authedUser, ...rest }) => (
   )} />
 )
 
+// Grab data from Redux store as props
 const mapStateToProps = ({authedUser}) => ({authedUser})
 
 export default withRouter(connect(mapStateToProps)(RouteDecider))

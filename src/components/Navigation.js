@@ -42,6 +42,9 @@ class Navigation extends React.Component {
         currentTab: 0
     }
 
+    /**
+     * @description Lifecycle events which is just called before receiving new set of props. Let's prepare the state.
+     */
     componentWillReceiveProps(nextProps) {
         if (this.props.location !== nextProps.location) {
             const {pathname} = nextProps.location
@@ -56,6 +59,11 @@ class Navigation extends React.Component {
         }
     }
 
+    /**
+     * @description Returns the tab index for the current path.
+     * @param {string} pathname - Path name for which tab index is needed.
+     * @returns {int} tabIndex.
+     */
     getTabIndexForPath(pathname) {
         // Let's map pathname to tab.
         // '/' maps to 0 (Questions)
@@ -72,9 +80,12 @@ class Navigation extends React.Component {
         }
     }
 
+    /**
+     * @description Handles logout.
+     * Dispatches an action 'unsetAuthedUser' and also moves to login page.
+     */
     handleLogout = event => {
         event.preventDefault()
-        console.log("handleLogout")
         // Let's dispatch action to set authedUser.
         this.props.dispatch(unsetAuthedUser())
         // Let's move back to login page.
@@ -84,10 +95,21 @@ class Navigation extends React.Component {
             .replace('/login')
     }
 
+    /**
+     * @description Handles tab change.
+     * @param {int} currentTab : Current tab index.
+     */
     handleTabChange = (event, currentTab) => {
         this.setState({currentTab})
     };
 
+    /**
+     * @description Renders app bar when user is logged in.
+     * When user is logged in, we display the app title, tabs and user avatar with logout option.
+     * @param {object} classes : For styling.
+     * @param {int} currentTab : Current tab index.
+     * @param {object} authedUser : Current authed user.
+     */
     renderAppBarWhenLoggedIn = (classes, currentTab, authedUser) => {
         return (
             <div className={classes.root}>
@@ -115,6 +137,11 @@ class Navigation extends React.Component {
         )
     }
 
+    /**
+     * @description Renders app bar when user is logged out.
+     * When user is logged out, we display the app title.
+     * @param {object} classes : For styling.
+     */
     renderAppBarWhenLoggedOut = (classes) => {
         return (
             <div className={classes.root}>
@@ -130,9 +157,8 @@ class Navigation extends React.Component {
     render() {
         const {classes, authedUser} = this.props;
         const {currentTab} = this.state
-        console.log("authedUser on Navigation : " + authedUser + " currentTab : " + currentTab)
         const isLoggedIn = authedUser !== null
-        console.log("authedUser on Navigation : " + authedUser + " isLoggedIn : " + isLoggedIn)
+        // Let's render the app bar based on whether user is logged in or not.
         return isLoggedIn
             ? (this.renderAppBarWhenLoggedIn(classes, currentTab, authedUser))
             : (this.renderAppBarWhenLoggedOut(classes))

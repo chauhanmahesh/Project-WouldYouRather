@@ -13,6 +13,11 @@ import NewQuestion from './NewQuestion'
 import Leaderboard from './Leaderboard'
 
 class App extends React.Component {
+
+    /**
+     * @description Lifecycle events just called after component is inserted into DOM. We will fetch initial data here which we 
+     * need for the application like users and questions.
+     */
     componentDidMount() {
         const {dispatch} = this.props
         dispatch(handleInitialData())
@@ -24,7 +29,9 @@ class App extends React.Component {
                 <div>
                     {/** To use page wise default, let's use CssBaseline**/}
                     <CssBaseline/>
+                    {/** Navigation component to make sure we will display Navigation Bar always*/}
                     <Navigation/>
+                    {/** Let's render different components based on the path.*/}
                     <Switch>
                         <Route exact path='/login' component={Login}/>
                         <RouteDecider exact path='/' component={QuestionTypeNavigation}/>

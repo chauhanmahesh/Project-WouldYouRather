@@ -55,35 +55,56 @@ class Login extends React.Component {
         currentUser: ''
     }
 
+    /**
+     * @description Lifecycle events just called after component is inserted into DOM. Let's prepare the state.
+     * We are handling specially in the case when user comes back to Login screen after logging out.
+     */
     componentDidMount() {
         let userKeys = Object.keys(this.props.users)
             let isInitialDataLoaded = userKeys.length > 0
+            // If the data is already loaded, let's set the currentUser to the first one.
             if (isInitialDataLoaded === true) {
                 this.updateState(this.props.users[userKeys[0]])
             }
     }
 
+    /**
+     * @description Lifecycle events which is just called before receiving new set of props. Let's prepare the state.
+     */
     componentWillReceiveProps(nextProps) {
         if (this.props.users !== nextProps.users) {
             let userKeys = Object.keys(nextProps.users)
             let isInitialDataLoaded = userKeys.length > 0
+            // If the data is already loaded, let's set the currentUser to the first one.
             if (isInitialDataLoaded === true) {
                 this.updateState(nextProps.users[userKeys[0]])
             }
         }
     }
 
+    /**
+     * @description Handles selected user change.
+     * @param {Object} users - All users.
+     */
     handleSelectedUserChange = users => event => {
         this.updateState(users[event.target.value])
     }
 
+    /**
+     * @description Handles login.
+     * Let's dispatch 'setAuthedUser' action and also move to home screen.
+     */
     handleLogin = event => {
         event.preventDefault()
         // Let's dispatch action to set authedUser.
         this.props.dispatch(setAuthedUser(this.state.currentUser))
+        // Let's move to home screen.
         this.props.history.replace('/')
     }
 
+    /**
+     * @description Updates state.
+     */
     updateState = user => {
         this.setState(() => ({currentUser: user}))
     }

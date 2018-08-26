@@ -36,6 +36,11 @@ const styles = theme => ({
 });
 
 class Leaderboard extends React.Component {
+    /**
+     * @description Lets prepare leaderboard data to be displayed.
+     * @param {Object} users - All the users to be displayed in the leaderboard.
+     * @return {Object} All users sorted list (based on score) with leaderboard data.
+     */
     prepareLeaderboardData = (users) => {
         const userKeys = Object.keys(users)
         // Let's prepare score for each user.
@@ -55,9 +60,14 @@ class Leaderboard extends React.Component {
                 score
             }
         })
+        // Let's sort the data before returning.
         return usersWithScore.sort((a, b) => b.score > a.score)
     }
 
+    /**
+     * @description Render's leaderboard table header.
+     * @param {Object} classes - For styles.
+     */
     renderTableHeader = (classes) => {
         return (
             <TableHead>
@@ -85,6 +95,7 @@ class Leaderboard extends React.Component {
 
     render() {
         const {classes, users} = this.props
+        // Let's get the leaderboard data.
         const leaderboardDataList = this.prepareLeaderboardData(users)
         return (
             <div className={classes.root}>

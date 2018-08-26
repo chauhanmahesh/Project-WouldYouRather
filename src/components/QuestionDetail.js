@@ -15,8 +15,12 @@ const styles = theme => ({
 })
 
 class QuestionDetail extends React.Component {
+    /**
+     * @description Navigates user to home page.
+     */
     navigateBackToHome = () => {
         const {history} = this.props
+        // Let's navigate to home page.
         history.push('/')
     }
     render() {
@@ -32,6 +36,7 @@ class QuestionDetail extends React.Component {
     }
 }
 
+// Grab data from Redux store as props
 const mapStateToProps = ({
     questions
 }, props) => {

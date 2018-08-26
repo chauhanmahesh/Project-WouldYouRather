@@ -23,10 +23,14 @@ const styles = theme => ({
 })
 
 class InvalidPage extends React.Component {
+    /**
+     * @description Navigates user to home page.
+     */
     navigateBackToHome = () => {
         const {history} = this.props
         history.push('/')
     }
+    
     render() {
         const {classes} = this.props
         return (

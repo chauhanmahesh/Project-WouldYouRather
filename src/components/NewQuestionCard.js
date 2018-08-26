@@ -49,20 +49,32 @@ class NewQuestionCard extends React.Component {
         optionB: ''
     }
 
+    /**
+     * @description Handles the optionA text change.
+     * Let's update the state based on the optionA text change.
+     */
     handleOptionAChange = event => {
         this.setState({
             optionA: event.target.value
         })
     }
 
+    /**
+     * @description Handles the optionB text change.
+     * Let's update the state based on the optionB text change.
+     */
     handleOptionBChange = event => {
         this.setState({
             optionB: event.target.value
         })
     }
 
+    /**
+     * @description Submits the new question.
+     * Dispatch and action 'handleSaveQuestion' to save the question.
+     */
     submitQuestion = (author, optionA, optionB) => {
-        // Let's dispatch an action to save answer.
+        // Let's dispatch an action to save question.
         const {dispatch, history} = this.props
         dispatch(handleSaveQuestion(author, this.state.optionA, this.state.optionB, () => {
             history.push('/')
@@ -71,6 +83,8 @@ class NewQuestionCard extends React.Component {
 
     render() {
         const {classes, authedUser} = this.props
+        // Let's check if we have to enable the submit button or not. It will get enabled only if there is some text in both
+        // optionA and optionB.
         const enableSubmit = this.state.optionA.trim().length > 0 && this.state.optionB.trim().length > 0
         return (
             <Card className={classes.questionCard}>
@@ -109,6 +123,7 @@ NewQuestionCard.propTypes = {
     classes: PropTypes.object.isRequired
 }
 
+// Grab data from Redux store as props
 const mapStateToProps = ({authedUser}) => ({authedUser})
 
 export default withRouter(withStyles(styles)(connect(mapStateToProps)(NewQuestionCard)))
