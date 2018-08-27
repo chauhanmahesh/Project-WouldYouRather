@@ -21,25 +21,23 @@ const styles = {
     }
 }
 
-class QuestionOption extends React.Component {
-    render() {
-        const {showAsSelected, optionText, classes, isFirstOption, handleSubmitAnswer} = this.props
+const QuestionOption = (props) => {
+    const {showAsSelected, optionText, classes, isFirstOption, handleSubmitAnswer} = props
         const backgroundColor = isFirstOption === 'true' ? '#d16161' : '#619bd1'
         const leftMargin = isFirstOption === 'true' ? 0 : 10
         const isDisabled = handleSubmitAnswer === undefined
-        return (
+    return (
         <Button disabled={isDisabled} className={classes.optionCard} style={{background:backgroundColor, marginLeft: leftMargin}} onClick={() => handleSubmitAnswer(isFirstOption ? 'optionOne' : 'optionTwo')}>
                 {
                     showAsSelected === 'true' && (<div style={{ color: 'yellow', zIndex: 1, top: 5, left:5, position: "absolute" }}>
                         <Icon size={25} icon={heart}/>
                     </div>)
                 }
-                <Typography className={classes.optionText} variant='title'>
-                    {optionText}
-                </Typography>
-            </Button>
-        )
-    }
+            <Typography className={classes.optionText} variant='title'>
+                {optionText}
+            </Typography>
+        </Button>
+    )
 }
 
 QuestionOption.propTypes = {

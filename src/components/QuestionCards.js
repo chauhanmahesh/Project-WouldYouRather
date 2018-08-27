@@ -13,34 +13,31 @@ const styles = theme => ({
     }
 })
 
-class QuestionCards extends React.Component {
-    render() {
-        const {questions, classes} = this.props
-        // Let's sort it.
-        const sortedQuestions = questions.sort((question) => question.timestamp)
-        const questionKeys = Object.keys(sortedQuestions)
-        if (questionKeys.length === 0) {
-            return (
-                <div className={classes.root}>
-                    <Typography variant='title' color="textSecondary">
-                        Sorry, no questions to show :'(
-                    </Typography>
-                </div>
-            )
-        }
+const QuestionCards = (props) => {
+    const {questions, classes} = props
+    // Let's sort it.
+    const sortedQuestions = questions.sort((question) => question.timestamp)
+    const questionKeys = Object.keys(sortedQuestions)
+    if (questionKeys.length === 0) {
         return (
-            <Grid container className={classes.root} spacing={16}>
-                {questionKeys.map((questionKey) => (
-                    <Grid item key={questionKey}>
-                        <QuestionCard
-                            key={questionKey}
-                            cardQuestion={sortedQuestions[questionKey]}/>
-                    </Grid>
-                ))
-}
-            </Grid>
+            <div className={classes.root}>
+                <Typography variant='title' color="textSecondary">
+                    Sorry, no questions to show :'(
+                </Typography>
+            </div>
         )
     }
+    return (
+        <Grid container className={classes.root} spacing={16}>
+            {
+                questionKeys.map((questionKey) => (
+                    <Grid item key={questionKey}>
+                        <QuestionCard key={questionKey} cardQuestion={sortedQuestions[questionKey]}/>
+                    </Grid>)
+                )
+            }
+        </Grid>
+    )
 }
 
 // Grab data from Redux store as props

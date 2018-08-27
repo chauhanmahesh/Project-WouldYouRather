@@ -46,37 +46,35 @@ const styles = theme => ({
     }
 });
 
-class LeaderboardRow extends React.Component {
-    render() {
-        const {leaderboardData, classes} = this.props
-        return (
-            <TableRow className={classes.tableRow}>
-                <TableCell>
-                    <div className={classes.row}>
-                        <Avatar src={leaderboardData.avatarURL} width='50' height='50'/>
-                        <Typography variant='subheading' color="textSecondary" align="center" style={{marginLeft: 20}}>
-                            {leaderboardData.name}
+const LeaderboardRow = (props) => {
+    const {leaderboardData, classes} = props
+    return (
+        <TableRow className={classes.tableRow}>
+            <TableCell>
+                <div className={classes.row}>
+                    <Avatar src={leaderboardData.avatarURL} width='50' height='50'/>
+                    <Typography variant='subheading' color="textSecondary" align="center" style={{marginLeft: 20}}>
+                        {leaderboardData.name}
+                    </Typography>
+                </div>
+            </TableCell>
+            <TableCell><Typography variant='subheading' color="textSecondary" align="center">
+                            {leaderboardData.totalQuestionsCreated}
+                        </Typography></TableCell>
+            <TableCell><Typography variant='subheading' color="textSecondary" align="center">
+                            {leaderboardData.totalAnswers}
+                        </Typography></TableCell>
+            <TableCell>
+                <div className={classes.column}>
+                    <Avatar className={classes.score}>
+                        <Typography variant='subheading' className={classes.scoreLabel}>
+                            {leaderboardData.score}
                         </Typography>
-                    </div>
-                </TableCell>
-                <TableCell><Typography variant='subheading' color="textSecondary" align="center">
-                                {leaderboardData.totalQuestionsCreated}
-                            </Typography></TableCell>
-                <TableCell><Typography variant='subheading' color="textSecondary" align="center">
-                                {leaderboardData.totalAnswers}
-                            </Typography></TableCell>
-                <TableCell>
-                    <div className={classes.column}>
-                        <Avatar className={classes.score}>
-                            <Typography variant='subheading' className={classes.scoreLabel}>
-                                {leaderboardData.score}
-                            </Typography>
-                        </Avatar>
-                    </div>
-                </TableCell>
-            </TableRow>
-        );
-    }
+                    </Avatar>
+                </div>
+            </TableCell>
+        </TableRow>
+    )
 }
 
 LeaderboardRow.propTypes = {

@@ -11,15 +11,13 @@ const styles = theme => ({
     }
 });
 
-class NewQuestion extends React.Component {
-    render() {
-        const {classes} = this.props
-        return (
-            <div className={classes.root}>
-                <NewQuestionCard />
-            </div>
-        )
-    }
+const NewQuestion = (props) => {
+    const {classes} = props
+    return (
+        <div className={classes.root}>
+            <NewQuestionCard/>
+        </div>
+    )
 }
 
 export default withRouter(withStyles(styles)(NewQuestion))
