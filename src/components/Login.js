@@ -15,6 +15,7 @@ import {
 import {relative} from 'upath'
 import {setAuthedUser} from '../actions/authedUser'
 import UserAvatar from './UserAvatar'
+import {Redirect} from 'react-router-dom'
 
 const styles = theme => ({
     root: {
@@ -52,7 +53,12 @@ const styles = theme => ({
 
 class Login extends React.Component {
     state = {
-        currentUser: ''
+        // State for the currentUser which is selected in the dropdown to login. This
+        // stores the user :id
+        currentUser: '',
+        // State to check if we have to redirect to the original page or not. This should be true if we have to 
+        // redirect user to a specific page after login else by default it will open '/' (Home page)
+        redirect: 'false'
     }
 
     /**
@@ -94,12 +100,17 @@ class Login extends React.Component {
      * @description Handles login.
      * Let's dispatch 'setAuthedUser' action and also move to home screen.
      */
-    handleLogin = event => {
-        event.preventDefault()
+    handleLogin = (referrer) => {
         // Let's dispatch action to set authedUser.
         this.props.dispatch(setAuthedUser(this.state.currentUser))
-        // Let's move to home screen.
-        this.props.history.replace('/')
+        // Let's see if we have redirect user to any specific page.
+        if(referrer !== undefined) {
+            // Let's make sure to redirect user to right page after login.
+            this.setState(() => ({redirect: 'true'}))
+        } else {
+            // If there was no referrer, let's move to home screen.
+            this.props.history.replace('/')
+        }
     }
 
     /**
@@ -111,7 +122,18 @@ class Login extends React.Component {
 
     render() {
         const {classes, users} = this.props
-        const {currentUser} = this.state
+        const {currentUser, redirect} = this.state
+        // Let's get the referrer(if any)
+        let referrer = this.props.location.state !== undefined && 
+            this.props.location.state.referrer
+
+        // Let's check if we have to redirect, based on the state value 'redirect'
+        if(redirect === 'true') {
+            // Let's get the path to redirect. If nothing is specified then let's redirect to Home.
+            let pathToRedirect = referrer !== undefined ? referrer.pathname : '/'
+            return <Redirect to={pathToRedirect}/>
+        }
+
         let userKeys = Object.keys(users)
         // Check if we got the list of users.
         let isInitialDataLoaded = userKeys.length > 0
@@ -140,7 +162,7 @@ class Login extends React.Component {
                                         variant="contained"
                                         color="secondary"
                                         className={classes.button}
-                                        onClick={this.handleLogin}>
+                                        onClick={() => this.handleLogin(referrer)}>
                                         Login
                                     </Button>
                                 </FormControl>
