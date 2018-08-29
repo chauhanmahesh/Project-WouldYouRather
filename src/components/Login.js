@@ -124,13 +124,15 @@ class Login extends React.Component {
         const {classes, users} = this.props
         const {currentUser, redirect} = this.state
         // Let's get the referrer(if any)
-        let referrer = this.props.location.state !== undefined && 
-            this.props.location.state.referrer
+        let referrer = this.props.location.state !== undefined ? 
+            this.props.location.state.referrer : undefined
 
         // Let's check if we have to redirect, based on the state value 'redirect'
         if(redirect === 'true') {
             // Let's get the path to redirect. If nothing is specified then let's redirect to Home.
             let pathToRedirect = referrer !== undefined ? referrer.pathname : '/'
+            // Also just to check pathToRedirect should not be /login. In that case we still need to redirect user to home '/'
+            pathToRedirect = pathToRedirect !== '/login' ? pathToRedirect : '/'
             return <Redirect to={pathToRedirect}/>
         }
 
@@ -176,7 +178,8 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    users: PropTypes.object.isRequired
 };
 
 // Grab data from Redux store as props

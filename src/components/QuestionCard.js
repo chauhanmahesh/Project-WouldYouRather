@@ -5,7 +5,6 @@ import {Card, Typography, Divider} from '@material-ui/core'
 import QuestionOption from './QuestionOption'
 import {connect} from 'react-redux'
 import UserAvatar from './UserAvatar'
-import QuestionResultChart from './QuestionResultChart'
 import {withRouter} from 'react-router-dom'
 import { handleSaveQuestionAnswer } from '../actions/questions'
 
@@ -26,28 +25,12 @@ const styles = theme => ({
         justifyContent: 'center',
         marginLeft: 20
     },
-    answerStat: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginTop: 20
-    },
-    navLink: {
-        textDecoration: 'none'
+    emptySpace: {
+        width: 10
     }
 })
 
 class QuestionCard extends React.Component {
-    /**
-     * @description Returns the option percentage.
-     * @param {int} favouredCount no of votes in favour.
-     * @param {int} unfavouredCount no of votes which are not in favour.
-     * @returns {int} option percentage in terms of favour.
-     */
-    optionPercentage = (favouredCount, unfavouredCount) => {
-        return (favouredCount / (favouredCount + unfavouredCount)) * 100
-    }
-
     /**
      * @description Returns  a option which authedUser selected for the passed question.
      * @param {Object} Question for which we want to check whether the authedUser has given any answer or not.
@@ -71,11 +54,8 @@ class QuestionCard extends React.Component {
     submitAnswer = (answer) => {
         console.log("handleSubmitAnswer()")
         // Let's dispatch an action to save answer.
-        const {dispatch, authedUser, cardQuestion, history} = this.props
-        dispatch(handleSaveQuestionAnswer(authedUser, cardQuestion.id, answer, () => {
-            // Let's move the question detail page.
-            history.push(`/questions/${cardQuestion.id}`)
-        }))
+        const {dispatch, authedUser, cardQuestion} = this.props
+        dispatch(handleSaveQuestionAnswer(authedUser, cardQuestion.id, answer))
     }
 
     /**
@@ -84,74 +64,18 @@ class QuestionCard extends React.Component {
     showInAnsweredMode = () => {
         const {classes, cardQuestion, users, authedUser} = this.props
         const author = users[cardQuestion.author]
-        // Let's calculate optionA percentage.
-        const option1Percentage = this.optionPercentage(cardQuestion.optionOne.votes.length, cardQuestion.optionTwo.votes.length)
-        // Let's calculate optionB percentage.
-        const option2Percentage = this.optionPercentage(cardQuestion.optionTwo.votes.length, cardQuestion.optionOne.votes.length)
+        const questionCreationTime = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(cardQuestion.timestamp)
         return (
             <Card className={classes.questionCard}>
                 <div className={classes.row}>
                     <Typography variant='title' color="textSecondary">
                         {author.name + " asks"}
                     </Typography>
-                    <UserAvatar showBig='false' avatarURL={author.avatarURL}/>
                 </div>
                 <Divider className={classes.topDivider}/>
-                <div className={classes.row}>
-                    <div className={classes.answerStat}>
-                        <QuestionResultChart
-                            option1Percentage={option1Percentage}
-                            option2Percentage={option2Percentage}/>
-                        <Typography
-                            variant='subheading'
-                            style={{textAlign:'center', color:'#d16161', marginTop: 10}}>
-                            Option A: {cardQuestion.optionOne.votes.length} votes
-                        </Typography>
-                        <Divider className={classes.topDivider}/>
-                        <Typography
-                            variant='subheading'
-                            style={{textAlign:'center', color:'#619bd1', marginTop: 10}}>
-                            Option B: {cardQuestion.optionTwo.votes.length} votes
-                        </Typography>
-                    </div>
-                    
-                    <div className={classes.column}>
-                        <Typography
-                            variant='subheading'
-                            color="primary"
-                            style={{
-                            marginTop: 20,
-                            marginBottom: 20
-                        }}>
-                            Would you rather?
-                        </Typography>
-                        <div className={classes.row}>
-                            <QuestionOption
-                                showAsSelected={this.getUserSelectedOption(cardQuestion, authedUser) === 'optionOne' ? 'true' : 'false'}
-                                isFirstOption='true'
-                                optionText={cardQuestion.optionOne.text}/>
-                            <QuestionOption
-                                showAsSelected={this.getUserSelectedOption(cardQuestion, authedUser) === 'optionTwo' ? 'true' : 'false'}
-                                optionText={cardQuestion.optionTwo.text}/>
-                        </div>
-                    </div>
-                </div>
-            </Card>
-        )
-    }
-
-    /**
-     * @description Renders the question in the unanswer mode.
-     */
-    showInUnansweredMode = () => {
-        const {classes, cardQuestion, users} = this.props
-        const author = users[cardQuestion.author]
-        return (
-            <Card className={classes.questionCard}>
-                <Typography variant='title' color="textSecondary">
-                    {author.name + " asks"}
+                <Typography variant='subheading' color="textSecondary" style={{textAlign: 'right'}}>
+                    {questionCreationTime}
                 </Typography>
-                <Divider className={classes.topDivider}/>
                 <div className={classes.row}>
                     <UserAvatar showBig='true' avatarURL={author.avatarURL}/>
                     <div className={classes.column}>
@@ -165,8 +89,52 @@ class QuestionCard extends React.Component {
                             Would you rather?
                         </Typography>
                         <div className={classes.row}>
-                            <QuestionOption isFirstOption='true' optionText={cardQuestion.optionOne.text} handleSubmitAnswer={this.submitAnswer}/>
-                            <QuestionOption optionText={cardQuestion.optionTwo.text} handleSubmitAnswer={this.submitAnswer}/>
+                            <QuestionOption
+                                showAsSelected={this.getUserSelectedOption(cardQuestion, authedUser) === 'optionOne' ? 'true' : 'false'}
+                                optionId='optionOne' color='#d16161' optionText={cardQuestion.optionOne.text}/>
+                            <div className={classes.emptySpace}/>
+                            <QuestionOption
+                                showAsSelected={this.getUserSelectedOption(cardQuestion, authedUser) === 'optionTwo' ? 'true' : 'false'}
+                                optionId='optionTwo' color='#619bd1' optionText={cardQuestion.optionTwo.text}/>
+                        </div>
+                    </div>
+                </div>
+            </Card>
+        )
+    }
+
+    /**
+     * @description Renders the question in the unanswer mode.
+     */
+    showInUnansweredMode = () => {
+        const {classes, cardQuestion, users} = this.props
+        const author = users[cardQuestion.author]
+        const questionCreationTime = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(cardQuestion.timestamp)
+        return (
+            <Card className={classes.questionCard}>
+                <Typography variant='title' color="textSecondary">
+                    {author.name + " asks"}
+                </Typography>
+                <Divider className={classes.topDivider}/>
+                <Typography variant='subheading' color="textSecondary" style={{textAlign: 'right'}}>
+                    {questionCreationTime}
+                </Typography>
+                <div className={classes.row}>
+                    <UserAvatar showBig='true' avatarURL={author.avatarURL}/>
+                    <div className={classes.column}>
+                        <Typography
+                            variant='subheading'
+                            color="primary"
+                            style={{
+                            marginTop: 20,
+                            marginBottom: 20
+                        }}>
+                            Would you rather?
+                        </Typography>
+                        <div className={classes.row}>
+                            <QuestionOption optionId='optionOne' color='#d16161' optionText={cardQuestion.optionOne.text} handleSubmitAnswer={this.submitAnswer}/>
+                            <div className={classes.emptySpace}/>
+                            <QuestionOption optionId='optionTwo' color='#619bd1' optionText={cardQuestion.optionTwo.text} handleSubmitAnswer={this.submitAnswer}/>
                         </div>
                     </div>
                 </div>
@@ -196,10 +164,20 @@ class QuestionCard extends React.Component {
 }
 
 QuestionCard.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    authedUser: PropTypes.object.isRequired,
+    users: PropTypes.object.isRequired,
+    cardQuestion: PropTypes.object.isRequired
 };
 
 // Grab data from Redux store as props
-const mapStateToProps = ({authedUser, users}) => ({authedUser, users})
+const mapStateToProps = ({authedUser, users, questions}, {cardQuestionId}) => {
+    const cardQuestion = questions[cardQuestionId]
+    return {
+        authedUser, 
+        users,
+        cardQuestion
+    }
+}
 
 export default withRouter(withStyles(styles)(connect(mapStateToProps)(QuestionCard)))

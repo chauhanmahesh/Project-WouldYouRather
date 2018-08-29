@@ -48,11 +48,12 @@ Note: This project is also deployed at https://udacity-would-you-rather.herokuap
     │   ├── NewQuestion.js # Renders the new question page which let's user to create new poll.
     │   ├── NewQuestionCard.js # Renders new question main card UI.
     │   ├── QuestionCard.js # Renders a single questionc card UI.
-    │   ├── QuestionCards.js # Renders a list of questions. It could be the list of 'Unanswered' or 'Answered'.
     │   ├── QuestionDetail.js # Renders a question detail card.
     │   ├── QuestionOption.js # Renders a single question option. i.e. either optionA or optionB.
-    │   ├── QuestionResultChart.js # Renders a pie chart in question detail page.
+    │   ├── QuestionPreviewCard.js # Renders a single question in preview mode. In preview mode, we don't display the second option.
+    │   ├── QuestionPreviewCards.js # Renders a list of questions preview. It could be the list of 'Unanswered' or 'Answered'.
     │   ├── QuestionTypeNavigation.js # Renders a app bar to let user navigate between 'Unanswered' and 'Answered' questions.
+    │   ├── QuestionResultChart.js # Renders a pie chart in question detail page.
     │   ├── RouteDecider.js # Component which is responsible to decide whether to redirect user to 'Login' page or 'Home' page.
     │   └── UserAvatar.js # Render user avatar UI.
     ├── middlewares

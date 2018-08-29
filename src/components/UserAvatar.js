@@ -23,7 +23,9 @@ const UserAvatar = (props) => {
 }
 
 UserAvatar.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    showBig: PropTypes.string,
+    avatarURL: PropTypes.string
 }
 
 export default withStyles(styles)(UserAvatar)

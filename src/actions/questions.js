@@ -16,11 +16,10 @@ export function saveQuestionAnswer(answerInfo) {
     return {type: SAVE_QUESTION_ANSWER, answerInfo}
 }
 
-export function handleSaveQuestionAnswer(authedUser, questionId, answer, callback) {
+export function handleSaveQuestionAnswer(authedUser, questionId, answer) {
     return (dispatch) => {
         return _saveQuestionAnswer({authedUser : authedUser.id, qid: questionId, answer: answer}).then(() => {
             dispatch(saveQuestionAnswer({authedUser : authedUser.id, qid: questionId, answer: answer}))
-            callback()
         })
     }
 }

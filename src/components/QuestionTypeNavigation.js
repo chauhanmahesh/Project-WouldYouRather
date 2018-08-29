@@ -4,7 +4,7 @@ import {withStyles} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import QuestionCards from './QuestionCards'
+import QuestionPreviewCards from './QuestionPreviewCards'
 import {connect} from 'react-redux'
 
 const styles = {
@@ -40,10 +40,12 @@ class QuestionTypeNavigation extends React.Component {
     showUnansweredQuestions = (questions, authedUser) => {
         // Let's filter the questions which we need. Here we just need unanswered
         // questions by authedUser.
-        const answerKeys = Object.keys(authedUser.answers)
-        const questionValues = Object.values(questions)
-        let unansweredQuestions = questionValues.filter((question) => !answerKeys.includes(Object.assign(question).id))
-        return (<QuestionCards questions={unansweredQuestions}/>)
+        const authedUseranswerKeys = Object.keys(authedUser.answers)
+        const questionKeys = Object.keys(questions)
+        let unansweredQuestionKeys = questionKeys.filter((questionKey) => !authedUseranswerKeys.includes(questionKey))
+        // Let's sort them now and just send questionIds to preview cards component.
+        const sortedQuestionIds = unansweredQuestionKeys.sort((a, b) => questions[b].timestamp - questions[a].timestamp)
+        return (<QuestionPreviewCards questionIds={sortedQuestionIds}/>)
     }
 
     /**
@@ -54,10 +56,12 @@ class QuestionTypeNavigation extends React.Component {
     showAnsweredQuestions = (questions, authedUser) => {
         // Let's filter the questions which we need. Here we just need answered
         // questions by authedUser.
-        const answerKeys = Object.keys(authedUser.answers)
-        const questionValues = Object.values(questions)
-        let answeredQuestions = questionValues.filter((question) => answerKeys.includes(Object.assign(question).id))
-        return (<QuestionCards questions={answeredQuestions}/>)
+        const authedUseranswerKeys = Object.keys(authedUser.answers)
+        const questionKeys = Object.keys(questions)
+        let answeredQuestionKeys = questionKeys.filter((questionKey) => authedUseranswerKeys.includes(questionKey))
+        // Let's sort them now and just send questionIds to preview cards component.
+        const sortedQuestionIds = answeredQuestionKeys.sort((a, b) => questions[b].timestamp - questions[a].timestamp)
+        return (<QuestionPreviewCards questionIds={sortedQuestionIds}/>)
     }
 
     render() {
@@ -80,7 +84,9 @@ class QuestionTypeNavigation extends React.Component {
 }
 
 QuestionTypeNavigation.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    questions: PropTypes.object.isRequired,
+    authedUser: PropTypes.object.isRequired
 }
 
 // Grab data from Redux store as props

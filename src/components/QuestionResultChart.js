@@ -4,7 +4,6 @@ import PieChart from 'react-minimal-pie-chart'
 const QuestionResultChart = (props) => {
     const {option1Percentage, option2Percentage} = props
     return (<PieChart
-        animate
         data={[
         {
             value: option1Percentage,

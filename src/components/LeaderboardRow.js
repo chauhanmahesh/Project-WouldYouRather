@@ -78,7 +78,8 @@ const LeaderboardRow = (props) => {
 }
 
 LeaderboardRow.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    leaderboardData: PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(LeaderboardRow)

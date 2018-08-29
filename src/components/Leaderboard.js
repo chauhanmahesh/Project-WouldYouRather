@@ -115,7 +115,8 @@ class Leaderboard extends React.Component {
 }
 
 Leaderboard.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    users: PropTypes.object.isRequired
 }
 
 const mapStateToProps = ({users}) => ({users})

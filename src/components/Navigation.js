@@ -166,7 +166,8 @@ class Navigation extends React.Component {
 }
 
 Navigation.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    authedUser: PropTypes.object
 };
 
 // Grab data from Redux store as props

@@ -120,7 +120,8 @@ class NewQuestionCard extends React.Component {
 }
 
 NewQuestionCard.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    authedUser: PropTypes.object.isRequired
 }
 
 // Grab data from Redux store as props
